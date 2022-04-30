@@ -1,0 +1,267 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: ''
+Metadata:
+  'AWS::CloudFormation::Designer':
+    e06b38c6-8771-4735-af57-aeee0ced6ab7:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 570
+        'y': 390
+      z: 1
+      embeds: []
+    9c9208de-b8c8-49a6-b1d8-be824b36a62b:
+      size:
+        width: 240
+        height: 240
+      position:
+        x: 60
+        'y': 390
+      z: 1
+      embeds:
+        - bdcdbd76-059f-4880-ac83-3523b8904723
+    bdcdbd76-059f-4880-ac83-3523b8904723:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 90
+        'y': 450
+      z: 2
+      parent: 9c9208de-b8c8-49a6-b1d8-be824b36a62b
+      embeds: []
+      iscontainedinside:
+        - 9c9208de-b8c8-49a6-b1d8-be824b36a62b
+    c288f9bc-9a31-49ae-ad34-5095c9a3c12e:
+      size:
+        width: 240
+        height: 240
+      position:
+        x: 410
+        'y': 140
+      z: 1
+      embeds:
+        - 7c4ef268-1acb-474b-b2a6-7c90a4435ae3
+    7c4ef268-1acb-474b-b2a6-7c90a4435ae3:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 440
+        'y': 200
+      z: 2
+      parent: c288f9bc-9a31-49ae-ad34-5095c9a3c12e
+      embeds: []
+      isassociatedwith:
+        - e06b38c6-8771-4735-af57-aeee0ced6ab7
+      iscontainedinside:
+        - c288f9bc-9a31-49ae-ad34-5095c9a3c12e
+    e7b6489d-4b61-4e19-85a0-f80ab332d64f:
+      source:
+        id: 9c9208de-b8c8-49a6-b1d8-be824b36a62b
+      target:
+        id: e06b38c6-8771-4735-af57-aeee0ced6ab7
+    2c2d8242-7115-4426-8170-89da275ae8ea:
+      size:
+        width: 150
+        height: 150
+      position:
+        x: 640
+        'y': 160
+      z: 1
+      embeds: []
+    8259c3fb-dc9a-4e9f-8861-9fb2e02382fb:
+      size:
+        width: 240
+        height: 240
+      position:
+        x: 60
+        'y': 90
+      z: 1
+      embeds:
+        - 66aaeca1-1356-4acc-a479-90379a3f952d
+    66aaeca1-1356-4acc-a479-90379a3f952d:
+      size:
+        width: 60
+        height: 60
+      position:
+        x: 90
+        'y': 150
+      z: 2
+      parent: 8259c3fb-dc9a-4e9f-8861-9fb2e02382fb
+      embeds: []
+      isassociatedwith:
+        - bdcdbd76-059f-4880-ac83-3523b8904723
+      iscontainedinside:
+        - 8259c3fb-dc9a-4e9f-8861-9fb2e02382fb
+Parameters:
+  MyAppVpcCidr:
+    Description: Choose Cidr for Vpc
+    Type: String
+    Default: 10.23.0.0/16
+  Subnet1Cidr:
+    Description: Choose Cidr for Subnet1
+    Type: String
+    Default: 10.23.1.0/24
+  Subnet2Cidr:
+    Description: Choose Cidr for Subnet1
+    Type: String
+    Default: 10.23.2.0/24
+  Subnet1AZs:
+    Description: Choose AZ for Subnet1
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+  Subnet2AZs:
+    Description: Choose AZ for Subnet1
+    Type: 'AWS::EC2::AvailabilityZone::Name'
+  WebserverKeyName:
+    Description: Choose Key Name
+    Type: 'AWS::EC2::KeyPair::KeyName'
+  WebserverInstanceType:
+    Description: Choose Instance Type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.nano
+      - t2.small
+  WebserverAMIID:
+    Description: Add AMI for webserver
+    Type: String
+Mappings: {}
+Conditions: {}
+Resources:
+  MyAppVpc:
+    Type: 'AWS::EC2::VPC'
+    Properties:
+      CidrBlock: !Ref MyAppVpcCidr
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: MyAppVpc
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 9c9208de-b8c8-49a6-b1d8-be824b36a62b
+  Subnet1:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Ref Subnet1AZs
+      VpcId: !Ref MyAppVpc
+      CidrBlock: !Ref Subnet1Cidr
+      Tags:
+        - Key: Name
+          Value: Subnet1
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 8259c3fb-dc9a-4e9f-8861-9fb2e02382fb
+  Subnet2:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: !Ref Subnet2AZs
+      VpcId: !Ref MyAppVpc
+      CidrBlock: !Ref Subnet2Cidr
+      Tags:
+        - Key: Name
+          Value: Subnet2
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 2c2d8242-7115-4426-8170-89da275ae8ea
+  MyAppIGW:
+    Type: 'AWS::EC2::InternetGateway'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: MyAppIGW
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: e06b38c6-8771-4735-af57-aeee0ced6ab7
+  AttachGateway:
+    Type: 'AWS::EC2::VPCGatewayAttachment'
+    Properties:
+      VpcId: !Ref MyAppVpc
+      InternetGatewayId: !Ref MyAppIGW
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: e7b6489d-4b61-4e19-85a0-f80ab332d64f
+  PublicSubnetRT:
+    Type: 'AWS::EC2::RouteTable'
+    Properties:
+      VpcId: !Ref MyAppVpc
+      Tags:
+        - Key: Name
+          Value: PublicSubnetRT
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: c288f9bc-9a31-49ae-ad34-5095c9a3c12e
+  RouteIGW:
+    Type: 'AWS::EC2::Route'
+    Properties:
+      RouteTableId: !Ref PublicSubnetRT
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref MyAppIGW
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 7c4ef268-1acb-474b-b2a6-7c90a4435ae3
+  Subnet1RouteTableAssoc:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Subnet1
+      RouteTableId: !Ref PublicSubnetRT
+  Subnet2RouteTableAssoc:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: !Ref Subnet2
+      RouteTableId: !Ref PublicSubnetRT
+  WebServersSecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupName: WebServersSecurityGroup
+      GroupDescription: SG created for web servers
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: 0.0.0.0/0
+      VpcId: !Ref MyAppVpc
+      Tags:
+        - Key: Name
+          Value: WebServersSecurityGroup
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: bdcdbd76-059f-4880-ac83-3523b8904723
+  Webserver1:
+    Type: 'AWS::EC2::Instance'
+    Properties:
+      KeyName: !Ref WebserverKeyName
+      SubnetId: !Ref Subnet1
+      ImageId: !Ref WebserverAMIID
+      InstanceType: !Ref WebserverInstanceType
+      Monitoring: 'false'
+      SecurityGroupIds:
+        - !Ref WebServersSecurityGroup
+      Tags:
+        - Key: Name
+          Value: Webserver1
+      UserData: !Base64 
+        'Fn::Join':
+          - ''
+          - - |
+              #!/bin/bash -ex 
+            - |
+              yum install httpd -y 
+            - |
+              chkconfig httpd on 
+            - >
+              echo '<h1>Deployed by CloudFormation </h1>' >
+              /var/www/html/index.html 
+            - service httpd start
+    Metadata:
+      'AWS::CloudFormation::Designer':
+        id: 66aaeca1-1356-4acc-a479-90379a3f952d
+Outputs: {}
